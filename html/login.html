@@ -1,0 +1,333 @@
+html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户登录</title>
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --error-color: #ea4335;
+            --success-color: #34a853;
+            --border-color: #dadce0;
+            --text-color: #202124;
+            --secondary-text: #5f6368;
+            --bg-color: #f8f9fa;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--secondary-text);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            transition: border 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 38px;
+            background: none;
+            border: none;
+            color: var(--secondary-text);
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .remember-me input {
+            margin-right: 8px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3367d6;
+        }
+        
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .links a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .links a:hover {
+            text-decoration: underline;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: var(--secondary-text);
+            font-size: 14px;
+        }
+        
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .divider::before {
+            margin-right: 16px;
+        }
+        
+        .divider::after {
+            margin-left: 16px;
+        }
+        
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            background-color: white;
+            color: var(--text-color);
+        }
+        
+        .btn-social:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .btn-social img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+        
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .captcha-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .captcha-image {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .captcha-input {
+            flex: 1;
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>欢迎登录</h1>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">用户名或邮箱</label>
+                <input type="text" id="username" class="form-control" required aria-required="true" placeholder="请输入用户名或邮箱">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" class="form-control" required aria-required="true" placeholder="请输入密码">
+                <button type="button" class="password-toggle" aria-label="显示/隐藏密码">显示</button>
+            </div>
+            
+            <div class="form-group captcha-container">
+                <div class="captcha-input">
+                    <label for="captcha">验证码</label>
+                    <input type="text" id="captcha" class="form-control" required aria-required="true" placeholder="请输入验证码">
+                </div>
+                <div class="captcha-image" title="点击刷新验证码">
+                    <span>ABCD12</span>
+                </div>
+            </div>
+            
+            <div class="remember-me">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">记住登录状态</label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">登录</button>
+            
+            <div class="links">
+                <a href="#" id="forgotPassword">忘记密码?</a>
+                <a href="#" id="help">需要帮助?</a>
+            </div>
+            
+            <div class="divider">或</div>
+            
+            <div class="social-login">
+                <button type="button" class="btn btn-social">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjRUE0MzM1IiBkPSJNMjIgMTJhMTAgMTAgMCAxIDEtMjAgMCAxMCAxMCAwIDAgMSAyMCAwWiIvPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik0xMi4xMTcgMTUuODg1aDIuMTEzbS0xLjA1Ni0xLjA1NWwxLjA1NiAxLjA1NS0xLjA1NiAxLjA1Nm0zLjE3LTMuMTY3aC0yLjExM20xLjA1Ni0xLjA1NWwtMS4wNTYgMS4wNTUtMS4wNTYtMS4wNTZtLTYuMzQgNi4zNGgyLjExM20tMS4wNTYtMS4wNTVsMS4wNTYgMS4wNTUtMS4wNTYgMS4wNTZtMy4xNy0zLjE2N2gtMi4xMTNtMS4wNTYtMS4wNTVsLTEuMDU2IDEuMDU1LTEuMDU2LTEuMDU2WiIvPjwvc3ZnPg==" alt="Google">
+                    使用 Google 登录
+                </button>
+                <button type="button" class="btn btn-social">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMTg3N0YyIiBkPSJNMjIgMTJhMTAgMTAgMCAxIDEtMjAgMCAxMCAxMCAwIDAgMSAyMCAwWiIvPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik0xMy4wNjUgMTUuOTk1di0yLjExM2gtMi4xMTN2LTIuMTEzaDIuMTEzVjkuNjYxaDIuMTEzdjIuMTEzaDIuMTEzdjIuMTEzaC0yLjExM3YyLjExM2gtMi4xMTN6Ii8+PC9zdmc+" alt="Facebook">
+                    使用 Facebook 登录
+                </button>
+            </div>
+        </form>
+        
+        <div class="register-link">
+            新用户? <a href="#" id="register">立即注册</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 密码显示/隐藏切换
+            const passwordToggle = document.querySelector('.password-toggle');
+            const passwordInput = document.getElementById('password');
+            
+            passwordToggle.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    passwordToggle.textContent = '隐藏';
+                } else {
+                    passwordInput.type = 'password';
+                    passwordToggle.textContent = '显示';
+                }
+            });
+            
+            // 表单提交
+            const loginForm = document.getElementById('loginForm');
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // 这里添加登录逻辑
+                console.log('登录表单已提交');
+            });
+            
+            // 验证码刷新
+            const captchaImage = document.querySelector('.captcha-image');
+            captchaImage.addEventListener('click', function() {
+                // 这里添加验证码刷新逻辑
+                console.log('刷新验证码');
+            });
+            
+            // 导航链接
+            document.getElementById('forgotPassword').addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('忘记密码');
+            });
+            
+            document.getElementById('register').addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('注册新用户');
+            });
+        });
+    </script>
+</body>
+</html>
